@@ -58,3 +58,14 @@ $ ./manage stop
 Wade@Epoch MINGW64 /c/jag-shuber-api/docker (master)
 $ ./manage down
 ```
+
+# Tips and Tricks
+
+## Time Zone Shift Fix
+
+```
+update shersched.duty_recurrence set 
+start_time =  (SPLIT_PART(start_time::TEXT, '-', 1) || '-' || (SPLIT_PART(start_time::TEXT, '-', 2)::int - 1))::timetz, 
+end_time =  (SPLIT_PART(end_time::TEXT, '-', 1) || '-' || (SPLIT_PART(end_time::TEXT, '-', 2)::int - 1))::timetz 
+where expiry_date >= current_date or expiry_date is null;
+```
